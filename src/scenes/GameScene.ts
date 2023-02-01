@@ -116,7 +116,7 @@ export default class GameScene extends Phaser.Scene {
   update(time: number, delta: number) {
     if (this.gameStatus == GameStatus.GAME_OVER || this.gameStatus == GameStatus.PRE_START) return;
 
-    if (this.ship.isDead) {
+    if (!this.ship.active) {
       this.gameOver();
       return;
     }

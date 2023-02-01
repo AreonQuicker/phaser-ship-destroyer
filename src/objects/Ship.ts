@@ -11,7 +11,6 @@ export class Ship extends Phaser.GameObjects.Image {
   private shooterGroup!: Phaser.Physics.Arcade.Group;
   private progressBar!: Phaser.GameObjects.Graphics;
   private otherShips!: Phaser.GameObjects.Group | Ship;
-  public isDead = false;
   public score = 0;
   private isPlayer = false;
 
@@ -107,14 +106,16 @@ export class Ship extends Phaser.GameObjects.Image {
       _: Phaser.GameObjects.GameObject,
       ob2: Phaser.GameObjects.GameObject,
     ) => {
-      const otherShip = ob2 as Ship;
-      this.shooterGroup.remove(bullet, true, true);
       if (o.active) o.destroy();
-      otherShip.takeDamamge(10);
-      this.score += 10;
-      if (this.isPlayer) {
-        sceneEvents.emit('score', this.score);
-        this.scene.sound.play('explode');
+      this.shooterGroup.remove(bullet, true, true);
+      const otherShip = ob2 as Ship;
+      if (otherShip.active && this.active) {
+        otherShip.takeDamamge(10);
+        this.score += 10;
+        if (this.isPlayer) {
+          sceneEvents.emit('score', this.score);
+          this.scene.sound.play('explode');
+        }
       }
     };
 
@@ -130,11 +131,10 @@ export class Ship extends Phaser.GameObjects.Image {
   }
 
   public takeDamamge(dame: number) {
-    if (this.isDead) return;
+    if (!this.active) return;
     this.lifePoints -= dame;
     this.updateProgress(this.lifePoints);
     if (this.lifePoints <= 0) {
-      this.isDead = true;
       this.destroy();
     }
   }
