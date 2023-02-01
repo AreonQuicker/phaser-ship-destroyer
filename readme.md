@@ -98,7 +98,7 @@ It does not aim to be opinionated.
 
 ## Dev Server Port
 
-You can change the dev server's port number by modifying the `vite.config.ts` file. Look for the `server` section:
+You can change the dev server's port number by modifying the `vite.config__` file. Look for the `server` section:
 
 ```js
 {
