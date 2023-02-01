@@ -1,6 +1,9 @@
 import Phaser from 'phaser';
-import GameScene from './GameScene';
+import GameScene from './scenes/GameScene';
 import Center = Phaser.Scale.Center;
+import { LoadScene } from './scenes/LoadScene';
+import { BackGroundScene } from './scenes/BackGroundScene';
+import { ScoreScene } from './scenes/ScroreScene';
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -11,10 +14,10 @@ const config: Phaser.Types.Core.GameConfig = {
     default: 'arcade',
     arcade: {
       gravity: { y: 0 },
-      debug: false,
+      debug: true,
     },
   },
-  scene: [GameScene],
+  scene: [LoadScene, GameScene, BackGroundScene, ScoreScene],
   scale: {
     autoCenter: Center.CENTER_BOTH,
   },

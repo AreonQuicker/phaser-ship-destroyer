@@ -1,12 +1,12 @@
 import Phaser from 'phaser';
-import { Ship } from './Ship';
+import { Ship } from '../objects/Ship';
 
 export class AIShipMovement {
   private ship!: Ship;
   private scene!: Phaser.Scene;
   private readonly playerShip!: Ship;
   private movementEvent!: Phaser.Time.TimerEvent;
-  private shoopEvent!: Phaser.Time.TimerEvent;
+  private shootEvent!: Phaser.Time.TimerEvent;
 
   constructor(scene: Phaser.Scene, ship: Ship, playerShip: Ship) {
     this.scene = scene;
@@ -29,7 +29,7 @@ export class AIShipMovement {
       loop: true,
     });
 
-    this.shoopEvent = this.scene.time.addEvent({
+    this.shootEvent = this.scene.time.addEvent({
       delay: 1000, // delay in milliseconds
       callback: () => {
         const a = Phaser.Math.Between(1, 2);
@@ -53,7 +53,7 @@ export class AIShipMovement {
 
   destroy() {
     this.movementEvent.destroy();
-    this.shoopEvent.destroy();
+    this.shootEvent.destroy();
     this.ship.removeListener('destroy');
     if (this.ship.active) {
       this.ship.currentBody.velocity.x = 0;

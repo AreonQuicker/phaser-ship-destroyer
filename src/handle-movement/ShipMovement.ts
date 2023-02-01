@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
-import { MovementPoint } from './GameScene';
-import { Ship } from './Ship';
+import { MovementPoint } from '../scenes/GameScene';
+import { Ship } from '../objects/Ship';
 
 export class ShipMovement {
   private readonly ship!: Ship;
@@ -31,7 +31,7 @@ export class ShipMovement {
     if (!this.ship.active) return;
     this.pointer = pointer;
     const end = new Phaser.Math.Vector2(this.pointer.x, this.pointer.y);
-    this.scene.physics.moveToObject(this.ship, end, 100);
+    this.scene.physics.moveToObject(this.ship, end, 130);
   }
 
   public destroy() {
