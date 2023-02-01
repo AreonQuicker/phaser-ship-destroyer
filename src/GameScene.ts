@@ -12,7 +12,6 @@ export default class GameScene extends Phaser.Scene {
   private computerShips!: Phaser.GameObjects.Group;
   private ship!: Ship;
   private shipMovement!: ShipMovement;
-  private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private currentMovementPoint!: MovementPoint;
   private spawnEvent!: Phaser.Time.TimerEvent;
   private totalComputers = 3;
@@ -51,7 +50,6 @@ export default class GameScene extends Phaser.Scene {
 
     this.spawnComputer();
 
-    this.cursors = this.input.keyboard.createCursorKeys();
     this.setupEvents();
   }
 
@@ -76,7 +74,7 @@ export default class GameScene extends Phaser.Scene {
     this.spawnEvent = this.time.addEvent({
       delay: 8000, // delay in milliseconds
       callback: () => {
-        if (this.computerShips.getChildren().length < 3) {
+        if (this.computerShips.getChildren().length < this.totalComputers) {
           this.spawnComputer();
         }
       },

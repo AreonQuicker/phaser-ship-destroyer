@@ -4,7 +4,7 @@ import { Ship } from './Ship';
 export class AIShipMovement {
   private ship!: Ship;
   private scene!: Phaser.Scene;
-  private playerShip!: Ship;
+  private readonly playerShip!: Ship;
   private movementEvent!: Phaser.Time.TimerEvent;
   private shoopEvent!: Phaser.Time.TimerEvent;
 
@@ -65,5 +65,6 @@ export class AIShipMovement {
     return this.ship.active;
   }
 
-  public update(time: number, delta: number) {}
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  public update(_: number, _2: number) {}
 }

@@ -3,7 +3,7 @@ import { MovementPoint } from './GameScene';
 import { Ship } from './Ship';
 
 export class ShipMovement {
-  private ship!: Ship;
+  private readonly ship!: Ship;
   private scene!: Phaser.Scene;
   private pointer: MovementPoint | null = null;
 
@@ -16,7 +16,7 @@ export class ShipMovement {
     });
   }
 
-  public update(time: number, delta: number) {
+  public update(_: number, _2: number) {
     if (!this.ship.active) return;
     if (this.pointer != null) {
       if (
