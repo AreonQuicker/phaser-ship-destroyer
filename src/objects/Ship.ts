@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { Shooter } from '../Shooter';
+import { Shooter } from './Shooter';
 import { MovementPoint } from '../scenes/GameScene';
 import { sceneEvents } from '../events';
 
@@ -94,43 +94,72 @@ export class Ship extends Phaser.GameObjects.Image {
 
   public setOtherShips(otherShips: Phaser.GameObjects.Group | Ship) {
     this.otherShips = otherShips;
+
+    this.scene.physics.add.overlap(
+      this.shooterGroup,
+      this.otherShips,
+      this.handleOverlapWithBullet.bind(this),
+      undefined,
+      this,
+    );
   }
 
   public shoot(pointer: MovementPoint) {
+    if (!pointer?.x || !pointer?.y) return;
+
     const bullet = this.shooterGroup.create(this.x, this.y, 'bullet');
 
     if (!bullet) return;
     if (this.isPlayer) this.scene.sound.play('shoot');
 
-    const handleOverlap = (
-      _: Phaser.GameObjects.GameObject,
-      ob2: Phaser.GameObjects.GameObject,
-    ) => {
-      if (o.active) o.destroy();
-      this.shooterGroup.remove(bullet, true, true);
-      const otherShip = ob2 as Ship;
-      if (otherShip.active && this.active) {
-        otherShip.takeDamamge(10);
-        this.score += 10;
-        if (this.isPlayer) {
-          sceneEvents.emit('score', this.score);
-          this.scene.sound.play('explode');
-        }
-      }
-    };
-
-    const o = this.scene.physics.add.overlap(
-      bullet,
-      this.otherShips,
-      handleOverlap.bind(this),
-      undefined,
-      this,
-    );
+    // const handleOverlap = (
+    //   _: Phaser.GameObjects.GameObject,
+    //   ob2: Phaser.GameObjects.GameObject,
+    // ) => {
+    //   if (o.active) o.destroy()
+    //   this.shooterGroup.remove(bullet, true, true)
+    //   const otherShip = ob2 as Ship
+    //   if (otherShip.active && this.active) {
+    //     otherShip.takeDamamge(10)
+    //     this.score += 10
+    //     if (this.isPlayer) {
+    //       sceneEvents.emit('score', this.score)
+    //       this.scene.sound.play('explode')
+    //     }
+    //   }
+    // }
 
     this.scene.physics.moveToObject(bullet, pointer, 500);
   }
 
-  public takeDamamge(dame: number) {
+  private handleOverlapWithBullet(
+    ob1: Phaser.GameObjects.GameObject,
+    ob2: Phaser.GameObjects.GameObject,
+  ) {
+    // if (o.active) o.destroy();
+    let otherShip: Ship;
+    let shooter: Shooter;
+
+    if (ob2 instanceof Ship) {
+      otherShip = ob2 as Ship;
+      shooter = ob1 as Shooter;
+    } else {
+      otherShip = ob1 as Ship;
+      shooter = ob2 as Shooter;
+    }
+
+    this.shooterGroup.remove(shooter, true, true);
+    if (otherShip.active && this.active) {
+      otherShip.takeDamamge(10);
+      this.score += 10;
+      if (this.isPlayer) {
+        sceneEvents.emit('score', this.score);
+        this.scene.sound.play('explode');
+      }
+    }
+  }
+
+  takeDamamge(dame: number) {
     if (!this.active) return;
     this.lifePoints -= dame;
     this.updateProgress(this.lifePoints);
@@ -139,7 +168,7 @@ export class Ship extends Phaser.GameObjects.Image {
     }
   }
 
-  private updateProgress(value: number) {
+  updateProgress(value: number) {
     this.progressBar.clear();
     this.progressBar.fillStyle(0x8ad173, 1);
     this.progressBar.fillRect(0, 0, value, 10);

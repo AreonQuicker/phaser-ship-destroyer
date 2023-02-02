@@ -20,7 +20,7 @@ export default class GameScene extends Phaser.Scene {
   private shipMovement!: ShipMovement;
   private currentMovementPoint!: MovementPoint;
   private spawnEvent!: Phaser.Time.TimerEvent;
-  private totalComputers = 5;
+  private totalComputers = 4;
 
   constructor() {
     super('GameScene');
@@ -68,7 +68,7 @@ export default class GameScene extends Phaser.Scene {
 
   startGame() {
     this.spawnEvent = this.time.addEvent({
-      delay: 4000, // delay in milliseconds
+      delay: 5000, // delay in milliseconds
       callback: () => {
         if (this.computerShips.getChildren().length < this.totalComputers) {
           this.spawnComputer();
